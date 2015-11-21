@@ -4,9 +4,6 @@ var source = 		require('vinyl-source-stream');
 var buffer = 		require('vinyl-buffer');
 var watchify = 		require('watchify');
 var browserify = 	require('browserify');
-var tape = 			require('gulp-tape');
-var tapColorize = 	require('tap-colorize');
-var run = 			require('tape-run');
 
 
 /**
