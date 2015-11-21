@@ -11,8 +11,17 @@ test('Returns the same object', function (t) {
 	event.trigger('event-string', name);
 });
 
+test('Passing 1 arguments', function (t) {
+    t.plan(1);
+    var event = Event();
+	var arg1 = 'arg one';
+	event.on('event-string', function(param1){
+		t.equal(param1, arg1);
+	});
+	event.trigger('event-string', arg1);
+});
 
-test('Passing argument', function (t) {
+test('Passing arguments', function (t) {
     t.plan(3);
     var event = Event();
 	var arg1 = 'arg one';
