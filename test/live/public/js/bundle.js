@@ -1,3 +1,4 @@
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /**
  * @fileoverview Simple event system.
  * @author david@stupid-studio.com (David Adalberth Andersen)
@@ -85,7 +86,6 @@ function Event(opts){
 		 * @define {array} takes the arguments and removes the first param
 		 */
 		var args = Array.prototype.slice.call(arguments).slice(1);
-		
 		if(events){
 			/** Trigger the events by the current key */
 			for (var i = 0; i < events.length; i++) {
@@ -96,7 +96,7 @@ function Event(opts){
 			 * If the trigger method is call before any key is added
 			 * save the key and params for to be called later
 			 */
-			queue[key] = args;
+			queue[key] = arguments;
 		}
 	}
 
@@ -115,3 +115,15 @@ function Event(opts){
 
 /** @export */
 module.exports = Event;
+},{}],2:[function(require,module,exports){
+var Event = require('../../event');
+var event = Event();
+
+var one = "the one string";
+event.on('test', function(param){
+	console.log(param, one, param == one);
+});
+
+event.trigger('test', one, "dfsd", "tesgds");
+
+},{"../../event":1}]},{},[2]);
