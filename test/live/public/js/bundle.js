@@ -86,6 +86,10 @@ function Event(opts){
 		 * @define {array} takes the arguments and removes the first param
 		 */
 		var args = Array.prototype.slice.call(arguments).slice(1);
+
+		/** If first argument is an array, pass it as argument */
+		if(args.length && args[0].constructor == Array) args = args[0];
+		
 		if(events){
 			/** Trigger the events by the current key */
 			for (var i = 0; i < events.length; i++) {
@@ -96,7 +100,7 @@ function Event(opts){
 			 * If the trigger method is call before any key is added
 			 * save the key and params for to be called later
 			 */
-			queue[key] = arguments;
+			queue[key] = args;
 		}
 	}
 
@@ -119,11 +123,17 @@ module.exports = Event;
 var Event = require('../../event');
 var event = Event();
 
-var one = "the one string";
-event.on('test', function(param){
-	console.log(param, one, param == one);
-});
-
-event.trigger('test', one, "dfsd", "tesgds");
+var event = Event();
+	var arg1 = 'arg one';
+	var arg2 = {text: 'arg two'};
+	var arg3 = ['arg one'];
+	var args = [arg1, arg2, arg3]
+	event.on('event-string', function(param1, param2, param3){
+		console.log(param1, arg1);
+		console.log(param2, arg2);
+		console.log(param3, arg3);
+	});
+	event.trigger('event-string', args);
+	event.trigger('event-string', arg1, arg2, arg3);
 
 },{"../../event":1}]},{},[2]);

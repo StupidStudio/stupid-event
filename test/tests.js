@@ -27,6 +27,22 @@ test('Passing argument', function (t) {
 });
 
 
+test('Passing array as only param and should convert to arguments', function (t) {
+    t.plan(3);
+    var event = Event();
+	var arg1 = 'arg one';
+	var arg2 = {text: 'arg two'};
+	var arg3 = ['arg one'];
+	var args = [arg1, arg2, arg3]
+	event.on('event-string', function(param1, param2, param3){
+		t.equal(param1, arg1);
+		t.equal(param2, arg2);
+		t.equal(param3, arg3);
+	});
+	event.trigger('event-string', args);
+});
+
+
 test('Anonymous functions should be overriden if they are "the same"', function (t) {
     t.plan(1);
     var event = Event();

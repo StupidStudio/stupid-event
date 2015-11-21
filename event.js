@@ -85,6 +85,9 @@ function Event(opts){
 		 * @define {array} takes the arguments and removes the first param
 		 */
 		var args = Array.prototype.slice.call(arguments).slice(1);
+
+		/** If first argument is an array, pass it as argument */
+		if(args.length && args[0].constructor == Array) args = args[0];
 		
 		if(events){
 			/** Trigger the events by the current key */
