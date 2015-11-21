@@ -40,13 +40,6 @@ gulp.task('live-test', function(){
 	.pipe(livereload());
 });
 
-gulp.task('test', function() {
-  return gulp.src('test/unit/*.js')
-    .pipe(tape({
-      reporter: tapColorize()
-    }));
-});
-
 /*
  * Watch
  * --------------------------------------------------
