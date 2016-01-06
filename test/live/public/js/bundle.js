@@ -72,7 +72,7 @@ function Event(opts){
 			}
 		};
 		/** If the functions isnt the same, push to call stack */
-		if(!same) event[key].push(call);
+		if(opts.forcePush || !same) event[key].push(call);
 	}
 
 	/**
@@ -88,7 +88,7 @@ function Event(opts){
 		var args = Array.prototype.slice.call(arguments).slice(1);
 
 		/** If first argument is an array, pass it as argument */
-		if(args.length && args[0].constructor == Array) args = args[0];
+		if(arguments.length === 2 && arguments[1].constructor == Array) args = arguments[1];
 		
 		if(events){
 			/** Trigger the events by the current key */

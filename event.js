@@ -71,7 +71,7 @@ function Event(opts){
 			}
 		};
 		/** If the functions isnt the same, push to call stack */
-		if(!same) event[key].push(call);
+		if(opts.forcePush || !same) event[key].push(call);
 	}
 
 	/**

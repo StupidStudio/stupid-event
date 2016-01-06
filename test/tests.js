@@ -74,11 +74,31 @@ test('Anonymous functions should be overriden if they are "the same"', function 
 		calls += 1;
 	});
 	event.on('event-string', function(){
+		calls += 1;
+	});
+	event.on('event-string', function(){
 		var test = "";
 		calls += 1;
 	});
 	event.trigger('event-string');
 	t.equal(calls, 2);
+});
+
+test('Anonymous functions should  NOT  be overriden if they are "the same"', function (t) {
+    t.plan(1);
+    var event = Event({forcePush:true});
+    var calls = 0;
+	event.on('event-string', function(){
+		calls += 1;
+	});
+	event.on('event-string', function(){
+		calls += 1;
+	});
+	event.on('event-string', function(){
+		calls += 1;
+	});
+	event.trigger('event-string');
+	t.equal(calls, 3);
 });
 
 
