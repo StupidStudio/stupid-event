@@ -101,7 +101,6 @@ test('Anonymous functions should  NOT  be overriden if they are "the same"', fun
 	t.equal(calls, 3);
 });
 
-
 test('Pre-triggered call should be queued and called later on event.on', function (t) {
     t.plan(2);
     var event = Event();
@@ -112,4 +111,56 @@ test('Pre-triggered call should be queued and called later on event.on', functio
 		t.equal(arg1, param1);
 		t.equal(arg2, param2);
 	});
+});
+
+test('Remove anonyous function', function (t) {
+    t.plan(2);
+    var event = Event();
+
+    /** ADD */
+    event.on('test', function(){
+    	// Remove me
+    	t.pass();
+    });
+    event.on('test', function(){
+    	// Remove me also me
+    	t.pass();
+    });
+    event.on('test', function(){
+    	// Remove me also me more
+    	t.pass();
+    });
+
+    /** REMOVE */
+    event.remove('test', function(){
+    	// Remove me also me
+    	t.pass();
+    });
+
+    event.trigger('test');
+});
+
+test('Remove functions', function (t) {
+    t.plan(2);
+    var event = Event();
+
+    /** ADD */
+    event.on('test', test1);
+    event.on('test', test2);
+    event.on('test', test3);
+
+    function test1(){
+    	t.pass();
+    }
+    function test2(){
+    	t.pass();
+    }
+    function test3(){
+    	t.pass();
+    }
+
+    /** REMOVE */
+    event.remove('test', test3);
+
+    event.trigger('test');
 });

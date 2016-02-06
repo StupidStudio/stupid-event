@@ -47,6 +47,23 @@ function Event(opts){
 		if(queue[key]) call.apply(null, queue[key]);
 	}
 
+	function remove(key, call){
+		var events = event[key];
+		if(!events) return;
+
+		/** Remove call from event */
+		var index = events.indexOf(call);
+        if (index != -1) events.splice(index, 1);
+
+        /** Check for anonymous function */
+        for (var i = 0; i < events.length; i++) {
+			if(call.toString() === events[i].toString()){
+				events.splice(i, 1);
+				break;
+			}
+		};
+	}
+
 	/**
 	 * Add event to events and override if it is the same
 	 * @param {string} key A string identifyer
@@ -62,17 +79,19 @@ function Event(opts){
 		 * Loop through the events on key
 		 * This is for comparing two anonymous
 		 */
-		for (var i = 0; i < event[key].length; i++) {
+
+		var events = event[key];
+		for (var i = 0; i < events.length; i++) {
 			/** If anonymous function is the same set boolean to true */
-			if(call.toString() === event[key][i].toString()){
+			if(call.toString() === events[i].toString()){
 				same = true;
 				/** override the current callback */
-				event[key][i] = call;
+				events[i] = call;
 				break;
 			}
 		};
 		/** If the functions isnt the same, push to call stack */
-		if(opts.forcePush || !same) event[key].push(call);
+		if(opts.forcePush || !same) events.push(call);
 	}
 
 	/**
@@ -109,6 +128,7 @@ function Event(opts){
 	 * @public {function}
 	 */
 	self.on = on;
+	self.remove = remove;
 	self.trigger = trigger;
 
 	/**
@@ -122,16 +142,26 @@ module.exports = Event;
 },{}],2:[function(require,module,exports){
 var Event = require('../../event');
 var event = Event();
+var calls = 0;
 
-var event = Event();
-	var arg1 = 'arg one';
-	var arg2 = {text: 'arg two'};
-	var arg3 = ['arg one'];
-	var args = [arg1]
-	event.on('event-string', function(param1, param2, param3){
-		console.log(param1, arg1);
-	});
-	event.trigger('event-string', args);
-	event.trigger('event-string', arg1, arg2, arg3);
+event.on('test', function(){
+	// Remove me
+	calls += 1;
+});
+event.on('test', function(){
+	// Remove me also me
+	calls += 1;
+});
+event.on('test', function(){
+	// Remove me also me more
+	calls += 1;
+});
+
+event.remove('test', function(){
+	// Remove me also me
+	calls += 1;
+});
+event.trigger('test');
+console.log(calls);
 
 },{"../../event":1}]},{},[2]);
