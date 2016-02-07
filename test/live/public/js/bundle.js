@@ -47,6 +47,13 @@ function Event(opts){
 		if(queue[key]) call.apply(null, queue[key]);
 	}
 
+	/**
+	 * Remove event from collection
+	 * @example event.remove('custom-event', function)
+	 * @param {string} key A string identifyer
+	 * @param {function} call A callback for the identifyer	
+	 * @config {object} event[key] If event[key] doesn't exist return.
+	 */
 	function remove(key, call){
 		var events = event[key];
 		if(!events) return;

@@ -46,6 +46,13 @@ function Event(opts){
 		if(queue[key]) call.apply(null, queue[key]);
 	}
 
+	/**
+	 * Remove event from collection
+	 * @example event.remove('custom-event', function)
+	 * @param {string} key A string identifyer
+	 * @param {function} call A callback for the identifyer	
+	 * @config {object} event[key] If event[key] doesn't exist return.
+	 */
 	function remove(key, call){
 		var events = event[key];
 		if(!events) return;
@@ -69,17 +76,24 @@ function Event(opts){
 	 * @param {function} call A callback for the identifyer
 	 */
 	function addEvent(key, call){
+		var events = event[key];
+
+		/** If forcepush, add to callstack */
+		if(opts.forceEvents){
+			events.push(call);
+			return;
+		}
+
 		/**
 		 * @define {boolean} if the function is the same,
 		 * boolean will be set to true
 		 */
 		var same = false;
+
 		/**
 		 * Loop through the events on key
 		 * This is for comparing two anonymous
 		 */
-
-		var events = event[key];
 		for (var i = 0; i < events.length; i++) {
 			/** If anonymous function is the same set boolean to true */
 			if(call.toString() === events[i].toString()){
@@ -89,8 +103,9 @@ function Event(opts){
 				break;
 			}
 		};
-		/** If the functions isnt the same, push to call stack */
-		if(opts.forcePush || !same) events.push(call);
+		
+		/** Push to call stack */
+		if(!same) events.push(call);
 	}
 
 	/**
