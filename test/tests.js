@@ -1,7 +1,7 @@
 var test = require('tape');
 var Event = require('../event');
 
-test('Returns the same object', function (t) {
+test('Passing and returns the same object', function (t) {
     t.plan(1);
 	var event = Event();
 	var name = 'im a stupid string';
@@ -11,17 +11,7 @@ test('Returns the same object', function (t) {
 	event.trigger('event-string', name);
 });
 
-test('Passing 1 argument', function (t) {
-    t.plan(1);
-    var event = Event();
-	var arg1 = 'arg one';
-	event.on('event-string', function(param1){
-		t.equal(param1, arg1);
-	});
-	event.trigger('event-string', arg1);
-});
-
-test('Passing 1 argument as array', function (t) {
+test('Passing array as single argument object', function (t) {
     t.plan(1);
     var event = Event();
 	var arg1 = 'arg one';
@@ -46,7 +36,6 @@ test('Passing arguments', function (t) {
 	event.trigger('event-string', arg1, arg2, arg3);
 });
 
-
 test('Passing array as only param and should convert to arguments', function (t) {
     t.plan(3);
     var event = Event();
@@ -70,14 +59,17 @@ test('Anonymous functions should be overriden if they are "the same"', function 
 	event.on('event-string', function(){
 		calls += 1;
 	});
+	// Overrides prev
 	event.on('event-string', function(){
 		calls += 1;
 	});
+	// Overrides prev
 	event.on('event-string', function(){
 		calls += 1;
 	});
+	// Does not override
 	event.on('event-string', function(){
-		var test = "";
+		var test = "Not the same, because of this variable";
 		calls += 1;
 	});
 	event.trigger('event-string');
@@ -86,7 +78,7 @@ test('Anonymous functions should be overriden if they are "the same"', function 
 
 test('Anonymous functions should  NOT  be overriden if they are "the same"', function (t) {
     t.plan(1);
-    var event = Event({forcePush:true});
+    var event = Event({forceEvents:true});
     var calls = 0;
 	event.on('event-string', function(){
 		calls += 1;
@@ -114,26 +106,25 @@ test('Pre-triggered call should be queued and called later on event.on', functio
 });
 
 test('Remove anonyous function', function (t) {
-    t.plan(2);
+    t.plan(1);
     var event = Event();
 
     /** ADD */
     event.on('test', function(){
-    	// Remove me
+    	// Unique
+    	t.pass();
+    });
+
+    // not unique
+    event.on('test', function(){
     	t.pass();
     });
     event.on('test', function(){
-    	// Remove me also me
-    	t.pass();
-    });
-    event.on('test', function(){
-    	// Remove me also me more
     	t.pass();
     });
 
     /** REMOVE */
     event.remove('test', function(){
-    	// Remove me also me
     	t.pass();
     });
 
